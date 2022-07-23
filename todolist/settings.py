@@ -1,4 +1,4 @@
-from pathlib import Path
+\from pathlib import Path
 import environ
 import os
 
@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
     'listapp.apps.ListappConfig',
 ]
 
