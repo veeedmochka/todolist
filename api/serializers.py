@@ -15,4 +15,4 @@ class TodoListCreateSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = TodoList
-		fields = ('name', 'user')
+		fields = ('pk', 'name', 'user')
