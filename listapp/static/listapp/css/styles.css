@@ -70,3 +70,23 @@ header ul {
 textarea {
     resize: none;
 }
+
+.modal-header,
+.modal-footer {
+    border-width: 0;
+}
+
+#change-list-btn {  
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    margin-top: -4px;
+}
+
+#add-list-btn {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+}

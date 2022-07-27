@@ -12,7 +12,7 @@ function get_tasks() {
 			$('#list-name-main').text(response['name'])
 			$('#list-name').text(response['name'])
 			if (Object.keys(tasks).length == 0) {
-				$('#tasks').append('<small class="text-muted text-center">(Пока пусто)</small>')
+				$('#tasks').append('<small id="empty" class="text-muted text-center">(Пока пусто)</small>')
 			}
 			else {
 				Object.keys(tasks).forEach(key => {
@@ -59,7 +59,7 @@ $.ajax({
 	success: function(response) {
 		lists_pks = Object.keys(response)
 		// если в куки есть id последнего списка
-		if (last_list_id) {
+		if (last_list_id && (lists_pks.includes(last_list_id.toString()))) {
 			default_list_pk = last_list_id
 		} else {
 			default_list_pk = lists_pks[0]
@@ -77,6 +77,7 @@ $.ajax({
 				)
 			}
 		})
+		console.log(default_list_pk)
 		get_tasks()
 	}
 })
@@ -95,23 +96,62 @@ $('#add-task').hover(function () {
 // Переключение списка
 $('#lists').on('click', '.dropdown-item', function (event) {
 	event.preventDefault()
-	pre_load()
+	if ($(this).attr('id') != 'add-list-btn') {
+		pre_load()
 
-	$('#list-id-' + default_list_pk).css('display', 'inline-block')
-	$('#' + $(this).attr('id')).css('display', 'none')
-	$(document).prop('title', 'Todo List: ' + $('#' + $(this).attr('id')).text());
+		$('#list-id-' + default_list_pk).css('display', 'inline-block')
+		$('#' + $(this).attr('id')).css('display', 'none')
+		$(document).prop('title', 'Todo List: ' + $('#' + $(this).attr('id')).text());
 
-	default_list_pk = $(this).attr('id').slice(8)
-	document.cookie = "last_list_id=" + default_list_pk
+		default_list_pk = $(this).attr('id').slice(8)
+		document.cookie = "last_list_id=" + default_list_pk
 
-	get_tasks()
+		get_tasks()
+	}
+})
+
+
+// добавить список
+$('#add-list-btn').click(function (event) {
+	$('#addListModal input').val('')
+	setTimeout(function () {
+		$('#addListModal input').focus()
+	}, 500)
+})
+$('#addListModal form').submit(function (event) {
+	event.preventDefault()
+	name = $('#addListModal input').val()
+	$.ajax({
+		url: '/api/v1/list/',
+		method: 'POST',
+		data: JSON.stringify({
+			"name": name
+		}),
+		contentType: 'application/json',
+		headers: {
+			'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+		},
+		success: function (response) {
+			pre_load()
+			// TODO: изменить для ситуации, когда создаётся первый список
+			$('#list-id-' + default_list_pk).css('display', 'inline-block')
+			default_list_pk = response["pk"]
+			document.cookie = "last_list_id=" + default_list_pk
+			lists_pks.push(default_list_pk)
+			$('#list-name-main').text(response['name'])
+			$('#list-name').text(response['name'])
+			$('#lists').append(
+				'<li><a class="dropdown-item" href style="display: none" id="list-id-' + default_list_pk + '">' + response['name'] + '</a></li>'
+			)
+			get_tasks()
+		}
+	})
 })
 
 
 // удаление задачи
 $('#tasks').on('click', 'input[type="checkbox"]', function (event) {
 	const box_id = $(this).attr('id').slice(7)
-	console.log(box_id, )
 	$.ajax({
 		url: '/api/v1/list/' + default_list_pk + '/delete-task/?task_id=' + box_id,
 		method: 'DELETE',
@@ -158,7 +198,7 @@ $('#add-task-inputs').on('click', '.btn-red', function (event) {
 		},
 		success: function (response) {
 			if (!('error' in response)) {
-				$('#tasks small').remove()	// удаляет надпись (Пока пусто)
+				$('#tasks small#empty').remove()	// удаляет надпись (Пока пусто)
 				$('#tasks').append(
 					'<a id="task-id-' + response['task_id'] + '" href="#" class="list-group-item list-group-item-action">' +
 	            	'<div class="d-flex flex-row align-items-center w-100 justify-content-between">' +
@@ -179,3 +219,75 @@ $('#add-task-inputs').on('click', '.btn-outline-cancle', function (event) {
 	$('#add-task').css('display', 'inline-block')
 	$('#add-task-inputs').css('display', 'none')
 })
+
+
+// кнопка переименования списка и удаления
+$('#change-list-btn').click(function (event) {
+	event.preventDefault()
+	$('#ChangeListModal input').val($('#list-name-main').text())
+	setTimeout(function () {
+		$('#ChangeListModal input').focus()
+	}, 500)
+})
+
+
+let new_name
+// переименование списка
+$('#ChangeListModal form').submit(function (event) {
+	event.preventDefault()
+	new_name = $('#ChangeListModal input').val()
+	if ($('#list-name-main').text() != new_name) {
+		$.ajax({
+			url: '/api/v1/list/' + default_list_pk + '/',
+			method: 'PATCH',
+			data: JSON.stringify({
+				"name": new_name
+			}),
+			contentType: 'application/json',
+			headers: {
+				'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+			},
+			success: function (response) {
+				$('#list-name-main').text(response['name'])
+				$('#list-name').text(response['name'])
+				$('#list-id-' + default_list_pk).text(response['name'])
+			}
+		})
+	}
+})
+
+
+// удалить список
+$('#delete-list-btn').click(function (event) {
+	$.ajax({
+		url: '/api/v1/list/' + default_list_pk + '/',
+		method: 'DELETE',
+		headers: {
+			'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+		},
+		success: function (response) {
+			// удаляем id из списка
+			lists_pks = jQuery.grep(lists_pks, function(value) {
+				return value != default_list_pk;
+			});
+			$('#list-id-' + default_list_pk).remove()
+			// изменяем default_list_pk
+			if (lists_pks.length != 0) {
+				default_list_pk = lists_pks[0]
+			} else {
+				// TODO: if length == 0
+			}
+
+			pre_load()
+
+			$('#list-id-' + default_list_pk).css('display', 'none')
+			$(document).prop('title', 'Todo List: ' + $('#list-id-' + default_list_pk).text());
+
+			document.cookie = "last_list_id=" + default_list_pk
+
+			get_tasks()
+
+		}
+	})
+})
+
