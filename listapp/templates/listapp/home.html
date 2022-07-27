@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Todo List{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'listapp/css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <header class="pt-2 pb-2 text-white">
+        <div class="container" style="max-width: 900px;">
+            <div class="mx-2 d-flex flex-row justify-content-between align-items-center">
+                <div>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light p-0" style="font-size: 18px; display: none;" id="list-name" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                            <div id="pre-load-list-name" class="rounded" style="background-color: white; width: 100px; height: 27px;"></div>
+                            <ul id="lists" class="dropdown-menu" aria-labelledby="list-name">
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="text-end">
+                    <a href="" class="btn btn-outline-light me-1">Выход</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    {% csrf_token %}
+
+    <div id="pre-load" class="container mt-4" style="max-width: 600px;">
+        <div class="text-center">
+            <div class="d-flex flex-row align-items-center justify-content-center">
+                <h4 class="p-0 m-0">
+                    <div class="rounded" style="background-color: #CED2D5; width: 100px; height: 28px;"></div>
+                </h4>
+            </div>
+        </div>
+        <div class="list-group list-group-flush mx-4 mt-3">
+            <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex flex-row align-items-center w-100 justify-content-between">
+                    <div>
+                        <div class="rounded" style="background-color: #CED2D5; width: 120px; height: 28px; margin-bottom: 3px;"></div>
+                    </div>
+                    <div>
+                        <input class="form-check-input m-0" type="checkbox" style="width: 25px; height: 25px;">
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex flex-row align-items-center w-100 justify-content-between">
+                    <div>
+                        <div class="rounded" style="background-color: #CED2D5; width: 320px; height: 27px; margin-bottom: 10px;"></div>
+                        <div class="rounded" style="background-color: #CED2D5; width: 200px; height: 16px;"></div>
+                    </div>
+                    <div>
+                        <input class="form-check-input m-0" type="checkbox" style="width: 25px; height: 25px;">
+                    </div>
+                </div>
+            </a>
+            
+        </div>
+    </div>
+
+    <div id="main-container" class="container mt-4" style="max-width: 600px; display: none;">
+        <div class="text-center">
+            <div class="d-flex flex-row align-items-center justify-content-center">
+                <h4 id="list-name-main" class="p-0 m-0">
+
+                </h4>
+                <!--
+                <div class="btn p-1 mx-1" style="width: 34px;">
+                    <img src="{% static 'listapp/img/img-1.png' %}" alt="" width="18" height="18" class="">
+                </div>
+                -->
+            </div>
+        </div>
+        <div id="tasks" class="list-group list-group-flush mx-4 mt-3" style="display: none;">
+        </div>
+        <div class="mt-2 mx-5">
+            <a href id="add-task" class="text-decoration-none" style="font-size: 16px; display: none">
+                <img src="{% static 'listapp/img/img-2.png' %}" id="img-2" alt="" width="14" style="margin-right: 4px; margin-top: -3px;">
+                <img src="{% static 'listapp/img/img-3.png' %}" id="img-3" alt="" width="14" style="margin-right: 4px; margin-top: -3px; display: none">
+                Добавить задачу
+            </a>
+        </div>
+        <div class="p-2 px-5" id="add-task-inputs" style="display: none">
+            <form>
+                <input type="text" class="form-control mb-2" placeholder="Название задачи" maxlength="60" autocomplete="off">
+                <textarea class="form-control mb-2" placeholder="Описание"></textarea>
+                <div class="d-flex flex-row">
+                    <button class="btn btn-red" type="submit">Добавить</button>
+                    <button class="btn btn-outline-cancle">Отмена</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" id="last_list_id">
+    let last_list_id = {{ last_list_id }}
+</script>
+<script type="text/javascript" src="{% static 'listapp/js/home.js' %}"></script>
+
+{% endblock %}
