@@ -1,7 +1,8 @@
 let lists_pks = []
-let default_list_pk = 0  	// id текущего списка
+let default_list_pk = ''  	// id текущего списка
 let tasks = []
-const time_pre_load = 140
+const time_pre_load = 0
+const time_get_tasks = 120
 
 
 function get_tasks() {
@@ -17,9 +18,9 @@ function get_tasks() {
 			else {
 				Object.keys(tasks).forEach(key => {
 					$('#tasks').append(
-						'<a id="task-id-' + key + '" href="#" class="list-group-item list-group-item-action">' +
-	                	'<div class="d-flex flex-row align-items-center w-100 justify-content-between">' +
-	                    '<div><p class="mb-0 fs-5" style="padding-right: 10px;">' + tasks[key][0] + '</p>' +
+						'<a id="task-id-' + key + '" class="task list-group-item list-group-item-action p-0" title="Нажми, чтобы изменить">' +
+	                	'<div class="d-flex flex-row align-items-center w-100 justify-content-between p-3 pt-0 pb-0">' +
+	                    '<div data-bs-toggle="modal" data-bs-target="#updateTaskModal" class="pt-2 pb-2 w-100"><p class="mb-0 fs-5" style="padding-right: 10px;">' + tasks[key][0] + '</p>' +
 	                    '<small class="text-muted">' + tasks[key][1] + '</small></div>' +
 	                    '<div><input id="box-id-' + key + '" class="form-check-input m-0" type="checkbox" title="Выполнено" style="width: 25px; height: 25px;"></div>' +
 	                	'</div></a>'
@@ -27,13 +28,13 @@ function get_tasks() {
 				})
 			}
 
-			$('#pre-load-list-name').fadeOut(time_pre_load, function() {
-				$('#list-name').fadeIn(time_pre_load)
+			$('#pre-load-list-name').fadeOut(time_get_tasks, function() {
+				$('#list-name').fadeIn(time_get_tasks)
 			})
-			$('#pre-load').fadeOut(time_pre_load, function () {
-				$('#main-container').fadeIn(time_pre_load)
-				$('#tasks').fadeIn(time_pre_load)
-				$('#add-task').fadeIn(time_pre_load)
+			$('#pre-load').fadeOut(time_get_tasks, function () {
+				$('#main-container').fadeIn(time_get_tasks)
+				$('#tasks').fadeIn(time_get_tasks)
+				$('#add-task').fadeIn(time_get_tasks)
 			})
 			
 		}
