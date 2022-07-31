@@ -1,0 +1,14 @@
+#login-errors p,
+#password-change-errors p,
+#password-reset-errors p,
+#empty-errors p {
+	color: #d1453b;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.field-error p {
+	margin: 0;
+	color: #d1453b;
+	padding: 0 0 0 10px;
+}

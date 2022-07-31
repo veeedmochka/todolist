@@ -1,0 +1,69 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #d1453b;
+}
+
+.form-check-input:focus,
+.btn-outline-light:focus {
+    box-shadow: none;
+}
+
+.form-check-input:focus {
+    background-color: #d1453b;
+    border-color: #d1453b;
+}
+
+header {
+    background-color: #d1453b;
+}
+
+header ul {
+    font-size: 18px;
+}
+
+.btn-outline-cancle {
+    margin-left: 8px;
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-cancle:hover {
+    border-color: #6c757d;
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-red {
+    background-color: #d1453b;
+    color: white;
+}
+
+.btn-red,
+.btn-outline-cancle {
+    font-size:  14px;
+    padding: 4px 8px;
+}
+
+.btn-red:hover {
+    background-color: #B33C34;
+    color: white;
+    border-color: #B33C34;
+}
+
+.btn-red:focus,
+.btn-red:active {
+    background-color: #B33C34;
+    color: white;
+    border-color: #B33C34;
+}
+
+.modal-header,
+.modal-footer {
+    border-width: 0;
+}
+
