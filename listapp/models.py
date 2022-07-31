@@ -3,7 +3,7 @@ from django.conf import settings
 
 
 class TodoList(models.Model):
-	name = models.CharField(max_length=20, verbose_name='Название', default='Новый список')
+	name = models.CharField(max_length=30, verbose_name='Название', default='Новый список')
 	tasks = models.JSONField(default=dict(tasks = {}), verbose_name='Список задач')
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
 
