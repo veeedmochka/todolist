@@ -276,7 +276,65 @@ $('#add-task-inputs').on('click', '.btn-red', function (event) {
 })
 
 
-// кнопка отмена
+// редактирование задачи
+let task_title = ''
+let task_comment = ''
+let task_id = 0
+$('#tasks').on('click', '.task', function (event) {
+	task_id = $(this).attr('id')
+	task_title = $('a[id=' + task_id + '] p').text()
+	task_comment = $('a[id=' + task_id + '] small').text()
+	$('#updateTaskModal input').val(task_title)
+	$('#updateTaskModal textarea').val(task_comment)
+	setTimeout(function () {
+		$('#updateTaskModal input').focus()
+	}, 500)
+})
+$('#updateTaskModal form').submit(function (event) {
+	event.preventDefault()
+	let new_title = $('#updateTaskModal input').val()
+	let new_comment = $('#updateTaskModal textarea').val()
+	let data = {'task_id': task_id}
+	if (new_title !== task_title) {
+		data['title'] = new_title
+	}
+	if (new_comment !== task_comment) {
+		if (new_comment === '') {
+			new_comment = '_empty_'
+		}
+		data['comment'] = new_comment
+	}
+	if (Object.keys(data).length > 1) {
+		$.ajax({
+			url: '/api/v1/list/' + default_list_pk + '/update-task/',
+			method: 'PATCH',
+			data: JSON.stringify(data),
+			contentType: 'application/json',
+			headers: {
+				'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+			},
+			success: function (response) {
+				console.log(response)
+				if (response['error']) {
+					return
+				}
+				if (response['title']) {
+					$('#' + task_id).find('p').text(response['title'])
+				}
+				if (response['comment']) {
+					$('#' + task_id).find('small').css('display', 'inline-block')
+					$('#' + task_id).find('small').text(response['comment'])
+				} else {
+					$('#' + task_id).find('small').css('display', 'none')
+					$('#' + task_id).find('small').text('')
+				}
+			}
+		})
+	}
+})
+
+
+// кнопка отмена добавления задачи
 $('#add-task-inputs').on('click', '.btn-outline-cancle', function (event) {
 	event.preventDefault()
 	$('#add-task').css('display', 'inline-block')
@@ -299,7 +357,7 @@ let new_name
 $('#ChangeListModal form').submit(function (event) {
 	event.preventDefault()
 	new_name = $('#ChangeListModal input').val()
-	if ($('#list-name-main').text() != new_name) {
+	if (($('#list-name-main').text() !== new_name) && (new_name !== '')) {
 		$.ajax({
 			url: '/api/v1/list/' + default_list_pk + '/',
 			method: 'PATCH',
