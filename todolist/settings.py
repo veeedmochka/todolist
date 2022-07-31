@@ -14,6 +14,17 @@ DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = (os.getenv('DEBUG', 'True') == 'True')
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 
 # Application definition
 
@@ -28,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'listapp.apps.ListappConfig',
     'api.apps.ApiConfig',
+    'account.apps.AccountConfig',
 ]
 
 MIDDLEWARE = [
