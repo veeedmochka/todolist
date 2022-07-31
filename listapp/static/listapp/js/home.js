@@ -239,7 +239,15 @@ $('.container').on('click', '#add-task', function (event) {
 })
 
 
-// кнопка добавить
+$('#add-task-inputs textarea').keydown(function (event) {
+	if (event['key'] === 'Enter') {
+		event.preventDefault()
+		$('#add-task-inputs .btn-red').click()
+	}
+})
+
+
+// кнопка добавить задачу
 $('#add-task-inputs').on('click', '.btn-red', function (event) {
 	event.preventDefault()
 	$('#add-task').css('display', 'inline-block')
