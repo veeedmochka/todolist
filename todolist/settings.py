@@ -96,6 +96,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'todolist/static'),
     os.path.join(BASE_DIR, 'listapp/static'),
+    os.path.join(BASE_DIR, 'account/static'),
 ]
 
 
