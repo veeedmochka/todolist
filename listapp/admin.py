@@ -5,4 +5,4 @@ from .models import TodoList
 
 @admin.register(TodoList)
 class TodoListAdmin(admin.ModelAdmin):
-	list_display = ('name', 'tasks', 'user')
+	list_display = ('name', 'user', 'tasks')
