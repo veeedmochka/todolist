@@ -111,12 +111,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header pb-0">
-                <h5 class="modal-title" id="ChangeListModalLabel">Переименовть или удалить список</h5>
+                <h5 class="modal-title" id="ChangeListModalLabel">Переименовать или удалить список</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form>
                 <div class="modal-body">
-                    <input class="form-control" type="text" placeholder="Новое название">
+                    <input class="form-control" type="text" placeholder="Новое название" maxlength="{{ name_max_length }}">
                 </div>
                 <div class="modal-footer pt-0">
                     <button type="button" id="delete-list-btn" class="btn btn-outline-cancle" data-bs-dismiss="modal">Удалить список</button>
@@ -137,7 +137,7 @@
             </div>
             <form>
                 <div class="modal-body">
-                    <input class="form-control" type="text" placeholder="Название">
+                    <input class="form-control" type="text" placeholder="Название" maxlength="{{ name_max_length }}">
                 </div>
                 <div class="modal-footer pt-0">
                     <button type="button" class="btn btn-outline-cancle" data-bs-dismiss="modal">Закрыть</button>
@@ -191,7 +191,11 @@
 {% block javascript %}
 
 <script type="text/javascript" id="last_list_id">
+    {% if last_list_id %}
     let last_list_id = {{ last_list_id }}
+    {% else %}
+    let last_list_id = null
+    {% endif %}
 </script>
 <script type="text/javascript" src="{% static 'listapp/js/home.js' %}"></script>
 
