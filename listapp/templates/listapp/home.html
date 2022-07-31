@@ -96,6 +96,16 @@
     </div>
 </div>
 
+<div id="add-list-div" class="container mt-4" style="max-width: 600px; display: none;">
+    <h4 class="text-center">Создайте первый список</h4>
+    <form class="mt-4 mx-auto" style="max-width: 500px;">
+        <input type="text" class="form-control mx-auto" placeholder="Название" maxlength="{{ name_max_length }}">
+        <div class="text-start">
+            <button type="submit" class="btn btn-red mt-3 p-1 px-2 fs-6">Создать</button>
+        </div>
+    </form>
+</div>
+
 <!-- Change list name or delete Modal -->
 <div class="modal fade" id="ChangeListModal" tabindex="-1" aria-labelledby="ChangeListModalLabel" aria-hidden="true">
     <div class="modal-dialog">
