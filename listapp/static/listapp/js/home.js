@@ -5,6 +5,22 @@ const time_pre_load = 0
 const time_get_tasks = 120
 
 
+function task_block(id, title, comment = '') {
+	let block
+	block = '<a id="task-id-' + id + '" class="task list-group-item list-group-item-action p-0" title="Нажми, чтобы изменить">' +
+				'<div class="d-flex flex-row align-items-center w-100 justify-content-between p-3 pt-0 pb-0">' +
+					'<div data-bs-toggle="modal" data-bs-target="#updateTaskModal" class="pt-2 pb-2 w-100">' +
+						'<p class="mb-0 fs-5" style="padding-right: 10px;">' + title + '</p>' +
+	                    '<small class="text-muted">' + comment + '</small>' +
+					'</div>' +
+				'<div>' +
+					'<input id="box-id-' + id + '" class="form-check-input m-0" type="checkbox" title="Выполнено" style="width: 25px; height: 25px;"></div>' +
+				'</div>' +
+			'</a>'
+	return block
+}
+
+
 function get_tasks() {
 	$.ajax({
 		url: 'api/v1/list/' + default_list_pk + '/',
@@ -17,14 +33,7 @@ function get_tasks() {
 			}
 			else {
 				Object.keys(tasks).forEach(key => {
-					$('#tasks').append(
-						'<a id="task-id-' + key + '" class="task list-group-item list-group-item-action p-0" title="Нажми, чтобы изменить">' +
-	                	'<div class="d-flex flex-row align-items-center w-100 justify-content-between p-3 pt-0 pb-0">' +
-	                    '<div data-bs-toggle="modal" data-bs-target="#updateTaskModal" class="pt-2 pb-2 w-100"><p class="mb-0 fs-5" style="padding-right: 10px;">' + tasks[key][0] + '</p>' +
-	                    '<small class="text-muted">' + tasks[key][1] + '</small></div>' +
-	                    '<div><input id="box-id-' + key + '" class="form-check-input m-0" type="checkbox" title="Выполнено" style="width: 25px; height: 25px;"></div>' +
-	                	'</div></a>'
-					)
+					$('#tasks').append(task_block(key, tasks[key][0], tasks[key][1]))
 				})
 			}
 
@@ -262,14 +271,7 @@ $('#add-task-inputs').on('click', '.btn-red', function (event) {
 		success: function (response) {
 			if (!('error' in response)) {
 				$('#tasks small#empty').remove()	// удаляет надпись (Пока пусто)
-				$('#tasks').append(
-					'<a id="task-id-' + response['task_id'] + '" class="task list-group-item list-group-item-action p-0" title="Нажми, чтобы изменить">' +
-	            	'<div class="d-flex flex-row align-items-center w-100 justify-content-between p-3 pt-0 pb-0">' +
-	                '<div data-bs-toggle="modal" data-bs-target="#updateTaskModal" class="pt-2 pb-2 w-100"><p class="mb-0 fs-5" style="padding-right: 10px;">' + response['title'] + '</p>' +
-	                '<small class="text-muted">' + response['comment'] + '</small></div>' +
-	                '<div><input id="box-id-' + response['task_id'] + '" class="form-check-input m-0" type="checkbox" style="width: 25px; height: 25px;"></div>' +
-	            	'</div></a>'
-				)
+				$('#tasks').append(task_block(response['task_id'], response['title'], response['comment']))
 			}
 		}
 	})
