@@ -189,14 +189,12 @@
 {% endblock %}
 
 {% block javascript %}
-
 <script type="text/javascript" id="last_list_id">
-    {% if last_list_id %}
+    {% if last_list_id != 'null' %}
     let last_list_id = {{ last_list_id }}
     {% else %}
     let last_list_id = null
     {% endif %}
 </script>
 <script type="text/javascript" src="{% static 'listapp/js/home.js' %}"></script>
-
 {% endblock %}

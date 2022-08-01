@@ -11,7 +11,7 @@ class TodoListView(LoginRequiredMixin, TemplateView):
 		context = super().get_context_data(*args, **kwargs)
 
 		# получаем id последнего открывавшегося списка из cookie
-		last_list_id = str(self.request.COOKIES.get('last_list_id', None))
+		last_list_id = str(self.request.COOKIES.get('last_list_id', 'null'))
 		# получаем максимальную длину имени списка
 		name_max_length = TodoList._meta.get_field('name').max_length
 
