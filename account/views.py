@@ -1,15 +1,30 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from django.contrib.auth.models import User
 
 from .forms import CustomLoginForm, CustomUserCreationForm, CustomPasswordChangeForm, CustomPasswordResetForm,\
-	CustomSetPasswordForm
+	CustomSetPasswordForm, AccountForm
 
 
-class AccountView(TemplateView):
+class AccountView(FormView):
 	template_name = 'account/account.html'
+	form_class = AccountForm
+	success_url = '/account/'
+
+	def get_form(self, form_class=AccountForm):
+		if self.request.method == 'POST':
+			form = form_class(self.request.POST, instance=User.objects.get(pk=self.request.user.pk))
+		else:
+			form = form_class(instance=User.objects.get(pk=self.request.user.pk))
+		return form
+
+	def form_valid(self, form):
+		form.save()
+		return super().form_valid(form)
 
 
 class CustomLoginView(LoginView):

@@ -105,3 +105,18 @@ class CustomSetPasswordForm(SetPasswordForm):
             'autocomplete': 'off',
             'placeholder': self.fields['new_password2'].label
         }
+
+
+class AccountForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control', 'autocomplete': 'off', 'placeholder': 'Имя пользователя'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control', 'autocomplete': 'off', 'placeholder': 'Электронный адрес'
+            })
+        }

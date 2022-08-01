@@ -2,3 +2,78 @@
 {% load static %}
 
 {% block title %}Аккаунт{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'account/css/login.css' %}">
+{% endblock %}
+
+{% block header %}
+    <div class="mx-2 d-flex flex-row justify-content-between align-items-center">
+        <a href="{% url 'home' %}" class="btn btn-outline-light me-1">Главная</a>
+        <div class="d-flex flex-row align-items-center">
+            <a href="{% url 'account' %}" class="m-0 mx-3 text-white">{{ request.user.username }}</a>
+            <button id="logout-btn" type="button" class="btn btn-outline-light me-1" data-bs-toggle="modal" data-bs-target="#logoutModal">Выход</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5" style="max-width: 500px;">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.errors }}
+            <div style="margin-right: auto;">
+                <h4 class="text-center">Настройки</h4>
+                <div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels mb-1">Имя пользователя</label>
+                            {{ form.username }}
+                            <div class="field-error" id="error-username" style="display: none">
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels mb-1">Электронная почта</label>
+                            {{ form.email }}
+                             <div class="field-error" id="error-email" style="display: none">
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="empty-errors" style="display: none;">
+                    <p class="m-0">Заполните все поля.</p>
+                </div>
+                <div class="mt-3 text-center">
+                    <button class="btn btn-red fs-6" type="submit" title="Ура, всё готово">Сохранить</button>
+                </div>
+                <div class="mt-2">
+                    <a href="{% url 'password_change' %}" class="text-decoration-none" style="color: #d1453b">Изменить пароль</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 300px;">
+            <div class="modal-content">
+                <div class="modal-header pb-0">
+                    <h5 class="modal-title" id="logoutModalLabel">Выход</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer pt-4">
+                    <button type="button" class="btn btn-outline-cancle" data-bs-dismiss="modal">Закрыть</button>
+                    <a href="{% url 'logout' %}" class="btn btn-red">Выйти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'account/js/account.js' %}"></script>
+{% endblock %}
